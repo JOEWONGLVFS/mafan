@@ -6,10 +6,9 @@ These files can be rather large, so they don't come with the
 default mafan distribution.
 """
 import os
-import urllib2
+from urllib.request import Request, urlopen, urlsplit
 
 from os.path import basename
-from urlparse import urlsplit
 
 def url2name(url):
     return basename(urlsplit(url)[2])
@@ -21,8 +20,8 @@ def download(url, localFileName = None, localDirName = None):
     and retaining the same filename.
     """
     localName = url2name(url)
-    req = urllib2.Request(url)
-    r = urllib2.urlopen(req)
+    req = Request(url)
+    r = urlopen(req)
     if r.info().has_key('Content-Disposition'):
         # If the response has Content-Disposition, we take file name from it
         localName = r.info()['Content-Disposition'].split('filename=')
@@ -50,15 +49,15 @@ def download(url, localFileName = None, localDirName = None):
 
 
 def download_traditional_word_list():
-  """
-  Download Jieba big dictionary for splitting and classifying 
-  both traditional and simplified Chinese texts.
-  """
+    """
+    Download Jieba big dictionary for splitting and classifying 
+    both traditional and simplified Chinese texts.
+    """
 
-  url = 'https://raw.github.com/fxsjy/jieba/master/extra_dict/dict.txt.big'
-  download(url, localDirName='data')
+    url = 'https://raw.github.com/fxsjy/jieba/master/extra_dict/dict.txt.big'
+    download(url, localDirName='data')
 
 if __name__ == '__main__':
-  confirm = raw_input("You are about to download all dictionary files. Could be up to 50MB in total. Are you sure?\n (y/n) ")
-  if confirm == 'y' or confirm == 'yes':
-      download_traditional_word_list()
+    confirm = input("You are about to download all dictionary files. Could be up to 50MB in total. Are you sure?\n (y/n) ")
+    if confirm == 'y' or confirm == 'yes':
+        download_traditional_word_list()
